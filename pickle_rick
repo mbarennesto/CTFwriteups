@@ -1,0 +1,66 @@
+# PING 10.10.86.224
+
+# NMAP: nmap -sc -sV 10.10.86.224
+
+----------------------------------------------------------------------------------
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.6 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 a3:2d:d3:9d:af:f7:8b:d9:b2:bb:c8:93:8b:24:bc:6a (RSA)
+|   256 fc:b2:38:31:30:b4:12:93:2e:9d:31:3a:cc:a9:b2:00 (ECDSA)
+|_  256 e6:67:54:d9:e3:7a:a5:2e:73:54:34:b3:92:b4:ef:5d (ED25519)
+80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))
+|_http-title: Rick is sup4r cool
+|_http-server-header: Apache/2.4.18 (Ubuntu)
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+----------------------------------------------------------------------------------
+
+# SOURCE PAGE 10.10.86.224
+
+-----------------------------------
+ <!--
+
+    Note to self, remember username!
+
+    Username: R1ckRul3s
+
+  -->
+-----------------------------------
+
+# ENUMERATION troviamo ulteriori subdomain con gobuster tramite il comando: gobuster dir -u http://10.10.86.224 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x txt,php,js -e -t 50
+
+-------------------------------------------------------------------------------------------------------
+===============================================================
+2022/02/04 23:55:04 Starting gobuster in directory enumeration mode
+===============================================================
+http://10.10.86.224/login.php            (Status: 200) [Size: 882]
+http://10.10.86.224/assets               (Status: 301) [Size: 313] [--> http://10.10.86.224/assets/]
+http://10.10.86.224/portal.php           (Status: 302) [Size: 0] [--> /login.php]                   
+http://10.10.86.224/robots.txt           (Status: 200) [Size: 17]
+------------------------------------------------------------------------------------------------------
+
+Trovato una serie di codici interessanti su http://10.10.86.224/robots.txt
+
+-------------------
+Wubbalubbadubdub
+------------------
+
+Facciamo una visita su http://10.10.86.224/login.php e proviamo ad accedere con le credenziali R1ckRul3s:Wubbalubbadubdub. Siamo dentro!
+
+Primo ingrediente: 
+
+------------------
+mr. meeseek hair
+------------------
+
+Secondo ingrediente trovato tramite comando: less /home/rick/second\ ingredients
+
+-----------------
+1 jerry tear
+-----------------
+
+Terzo ingrediente con il comando: sudo cat /root/3rd.txt
+
+-------------
+fleeb juice
+-------------
